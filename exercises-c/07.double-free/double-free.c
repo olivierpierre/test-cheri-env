@@ -19,13 +19,11 @@ __cheri_compartment("double-free") int vuln1(void)
 
     int *ptr2 = ptr;
 
-    int rc1 = free(ptr);
-    CHERIOT_DEBUG_LOG(DEBUG_CONTEXT, "First free rc = {}", rc1);
+    free(ptr);
+    CHERIOT_DEBUG_LOG(DEBUG_CONTEXT, "After first free");
 
-    int rc2 = free(ptr2);
-    if (rc2 == -EINVAL){
-        CHERIOT_DEBUG_LOG(DEBUG_CONTEXT, "Second free rejected: EINVAL (double free detected).");
-    }
+    free(ptr2);
+    CHERIOT_DEBUG_LOG(DEBUG_CONTEXT, "After second free");
 
     return 0;
 }

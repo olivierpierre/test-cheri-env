@@ -17,13 +17,11 @@ __cheri_compartment("double-free") int vuln1(void)
     if (!ptr) { Debug::log( "malloc returned NULL"); return 0; }
     *ptr = 42;
 
-    int rc1 = free(ptr);
-    Debug::log( "free 1 rc = {}", rc1);
+    free(ptr);
+    Debug::log("After first free");
 
-    int rc2 = free(ptr);
-    if (rc2 == -EINVAL){
-        Debug::log( "Second free rejected: EINVAL (double free detected).");
-    }
+    free(ptr);
+    Debug::log("After second free");
 
     return 0;
 }
